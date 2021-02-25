@@ -7,6 +7,7 @@
 // Dependencies
 var http =  require('http');
 var url = require('url')
+var stringDecoder = require('string_decoder').StringDecoder;
 
 // the server should respond to all requests with a string
 
@@ -16,10 +17,29 @@ var server = http.createServer((req,res)=>{
   // Get the path
   var path = parseUrl.pathname;
   var trimmedPath = path.replace(/^\/+|\/+$/g,'');
+  //get the query string as an object
+  var queryStringObject = parseUrl.query;
+  //Get the http method
+  var method = req.method.toLowerCase();
+  //Get the header as an object
+  var headers = req.headers;
+  //Get the payload, if any
+  var decoder = new stringDecoder('utf-8');
+  var buffer='';
+  req.on('data',(data)=>{
+    buffer += decoder.write(data);
+  });
+  req.on('end',()=>{
+    buffer += decoder.end();
+    res.end('Hello World\n');
+    console.log('request recieved on path:',trimmedPath,"with this method",method);
+    console.log('with these queries:' , queryStringObject);
+    console.log('request was recieved with those headers',headers);
+    console.log('request recieved with this payload:',buffer)
+  })
   //send the response
-  res.end('Hello World\n');
   //Log the request path
-  console.log('request recieved on path:',trimmedPath);
+
 });
 
 
