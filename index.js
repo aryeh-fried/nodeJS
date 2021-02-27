@@ -9,10 +9,40 @@ var http =  require('http');
 var url = require('url')
 var stringDecoder = require('string_decoder').StringDecoder;
 //var config = require( './config.js');
-var config = require('./config.js');
+var config = require('./config.js');// not working for some reason...
+var _data = require('./lib/data');
+var router = require('./router');
+//@TODO: delete this
+//TESTING
+
+//testing creating a new json file
+
+// _data.create('test','newFile',{'foo':'bar'},(err)=>{
+//   console.log('this was the error', err);
+// });
+
+//testing reading data from a file
+
+// _data.read('test','newFile',(err,data)=>{
+//   console.log('the data is ',data);
+// });
+
+
+//testing updating the file
+
+// _data.update('test','newFile',{'boo':'far'},(err)=>{
+//    console.log('this was the error', err);
+//  });
+
+// //testing deleting a file
+
+// _data.delete('test','newFile',(err)=>{
+//     console.log('this was the error', err);
+//     });
+
+router.myRouter();
 
 // the server should respond to all requests with a string
-
 var server = http.createServer((req,res)=>{
   // get the url and parse it
   var parseUrl = url.parse(req.url,true);
@@ -72,9 +102,7 @@ var server = http.createServer((req,res)=>{
 
 // start the server and have it listen on port 3000
 server.listen(3000,()=>{
-  console.log(config.port);
-  console.log("The server is listening  on port : ",config.port,"now");
-  console.log("in config : ",config.envName );
+  console.log("The server is listening  on port : 3000 now");
 })
 //define the handler
 var handlers = {};
