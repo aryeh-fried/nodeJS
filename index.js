@@ -8,7 +8,8 @@
 var http =  require('http');
 var url = require('url')
 var stringDecoder = require('string_decoder').StringDecoder;
-
+//var config = require( './config.js');
+var config = require('./config.js');
 
 // the server should respond to all requests with a string
 
@@ -56,6 +57,8 @@ var server = http.createServer((req,res)=>{
       var payloadString = JSON.stringify(payload);
 
       // return the response
+      //this line is for showing the payload receive in a json format
+      res.setHeader('content-Type','application/json')
       res.writeHead(statusCode);
       res.end(payloadString);
 
@@ -69,7 +72,9 @@ var server = http.createServer((req,res)=>{
 
 // start the server and have it listen on port 3000
 server.listen(3000,()=>{
-  console.log("The server is listening  on port 3000 now");
+  console.log(config.port);
+  console.log("The server is listening  on port : ",config.port,"now");
+  console.log("in config : ",config.envName );
 })
 //define the handler
 var handlers = {};
@@ -80,6 +85,12 @@ handlers.sample = (data,callback)=>{
   //callback a http status code and a payload object
   callback(406,{'name': 'sample handler'});
 };
+// ping handler
+handlers.ping = (data,callback)=>{
+  //callback a http status code and a payload object
+  callback(200,{'ping': 'ping'});
+};
+
 
 //not found handler
 
@@ -89,5 +100,7 @@ handlers.notFound = (data,callback)=>{
 //define a reqeust router
 
 var router = {
-  'sample': handlers.sample
+  'sample': handlers.sample,
+  'ping':handlers.ping
+
 };
